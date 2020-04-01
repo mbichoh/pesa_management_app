@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">pesa_app</string>
     <string name="welcome">Pesa Management App</string>
-    <string name="desc_welcome">Plan.Divide.Save</string>
+    <string name="desc_welcome">Plan . Divide . Save</string>
+    <string name="signUp">SIGN UP</string>
+    <string name="login">LOGIN</string>
 </resources>
