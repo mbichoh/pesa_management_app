@@ -4,4 +4,5 @@
     <string name="desc_welcome">Plan . Divide . Save</string>
     <string name="signUp">SIGN UP</string>
     <string name="login">LOGIN</string>
+    <string name="verify">Verification code sent to your number.</string>
 </resources>
