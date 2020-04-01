@@ -30,7 +30,8 @@ public class Login extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //after verification
+                startActivity(new Intent(Login.this, Dashboard.class));
             }
         });
 

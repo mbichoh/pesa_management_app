@@ -82,11 +82,10 @@
         android:id="@+id/loginBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
         android:layout_marginTop="10dp"
+        android:textSize="16dp"
         android:backgroundTint="@color/colorInfo"
-        android:fontFamily="@font/sspsb"
+        android:fontFamily="@font/sspr"
         android:text="Login"
         android:textColor="@color/colorPrimary"
         app:rippleColor="?attr/colorPrimaryDark" />
