@@ -1,0 +1,2 @@
+rootProject.name='pesa_app'
+include ':app'
