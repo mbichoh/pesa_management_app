@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context=".Dashboard">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -15,6 +16,129 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+
+        <LinearLayout
+            android:id="@+id/linear_layout_dash"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/txtUserWelcome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Welcome Nathan Mbicho"
+                android:layout_margin="10dp"
+                android:textAlignment="center"
+                android:fontFamily="@font/sspr"
+                android:textSize="17dp"
+                />
+
+        <LinearLayout
+            android:id="@+id/linear1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/activePlansBtn"
+                android:layout_width="130dp"
+                android:layout_height="120dp"
+                android:gravity="center"
+                android:background="@drawable/bg_cards"
+                android:layout_margin="10dp"
+                android:padding="5dp"
+                android:orientation="vertical">
+
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    android:src="@drawable/ic_undraw_security"
+
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sspr"
+                    android:paddingTop="3dp"
+                    android:text="Active Plans"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="15sp" />
+
+                </LinearLayout>
+            <LinearLayout
+                android:id="@+id/completedPlansBtn"
+                android:layout_width="130dp"
+                android:layout_height="120dp"
+                android:background="@drawable/bg_cards"
+                android:gravity="center"
+                android:layout_margin="10dp"
+                android:padding="5dp"
+                android:orientation="vertical">
+
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    android:src="@drawable/ic_undraw_security"
+
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sspr"
+                    android:paddingTop="3dp"
+                    android:text="Completed Plans"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorInfo"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linear2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/canceledPlansBtn"
+                android:layout_width="130dp"
+                android:layout_height="120dp"
+                android:gravity="center"
+                android:padding="5dp"
+                android:background="@drawable/bg_cards"
+                android:orientation="vertical">
+
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    android:src="@drawable/ic_undraw_security"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sspr"
+                    android:paddingTop="3dp"
+                    android:text="Canceled Plans"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorDanger"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+        </LinearLayout>
         <include layout="@layout/custom_bottom_sheet" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
