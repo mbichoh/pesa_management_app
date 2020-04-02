@@ -5,10 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -16,12 +13,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -78,46 +73,47 @@ public class Dashboard extends AppCompatActivity {
         btnSavePlan = (Button) findViewById(R.id.savePlanBtn);
 
         //datePicker
-        btnShowDatePicker = (ImageView) findViewById(R.id.btnShowDatePicker);
+                btnShowDatePicker = (ImageView) findViewById(R.id.btnShowDatePicker);
 
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Africa/Nairobi"));
-        calendar.clear();
+                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Africa/Nairobi"));
+                calendar.clear();
 
-        long today = MaterialDatePicker.todayInUtcMilliseconds();
+                long today = MaterialDatePicker.todayInUtcMilliseconds();
 
-        calendar.setTimeInMillis(today);
+                calendar.setTimeInMillis(today);
 
-        calendar.set(Calendar.MONTH, Calendar.JANUARY);
-        long january = calendar.getTimeInMillis();
+                calendar.set(Calendar.MONTH, Calendar.JANUARY);
+                long january = calendar.getTimeInMillis();
 
-        calendar.set(Calendar.MONTH, Calendar.DECEMBER);
-        long december = calendar.getTimeInMillis();
+                calendar.set(Calendar.MONTH, Calendar.DECEMBER);
+                long december = calendar.getTimeInMillis();
 
-        //calender constraints
-        CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
-        constraintBuilder.setStart(january);
-        constraintBuilder.setEnd(december);
+                //calender constraints
+                CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
+                constraintBuilder.setStart(january);
+                constraintBuilder.setEnd(december);
 
-        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();  //for datePicker() single month and select show
-        builder.setTitleText("SELECT A DATE");
-        builder.setSelection(today); //get today
-        builder.setCalendarConstraints(constraintBuilder.build()); //get year calender
-        final MaterialDatePicker materialDatePicker = builder.build();
+                MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();  //for datePicker() single month and select show
+                builder.setTitleText("SELECT A DATE");
+                builder.setTheme(getTitleColor());
+                builder.setSelection(today); //get today
+                builder.setCalendarConstraints(constraintBuilder.build()); //get year calender
+                final MaterialDatePicker materialDatePicker = builder.build();
 
-        btnShowDatePicker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                materialDatePicker.show(getSupportFragmentManager(), "DATE_PICKER");
-            }
-        });
+                btnShowDatePicker.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        materialDatePicker.show(getSupportFragmentManager(), "DATE_PICKER");
+                    }
+                });
 
-                materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
-            @Override
-            public void onPositiveButtonClick(Object selection) {
-                txtSelectedDate.setText("Receiving Date : "+materialDatePicker.getHeaderText());
-            }
-        });
-
+                        materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+                    @Override
+                    public void onPositiveButtonClick(Object selection) {
+                        txtSelectedDate.setText("Receiving Date : "+materialDatePicker.getHeaderText());
+                    }
+                });
+        //datePicker
         //linear active
         mLinearActive.setOnClickListener(new View.OnClickListener() {
             @Override

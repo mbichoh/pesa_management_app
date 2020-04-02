@@ -1,6 +1,9 @@
 <resources>
 
     <!-- Base application theme. -->
+    <style name="Base.Theme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:datePickerDialogTheme">@color/colorInfo</item>
+    </style>
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
