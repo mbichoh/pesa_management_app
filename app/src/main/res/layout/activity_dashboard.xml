@@ -115,7 +115,7 @@
                 android:layout_width="130dp"
                 android:layout_height="120dp"
                 android:gravity="center"
-                android:padding="5dp"
+                android:layout_margin="10dp"
                 android:background="@drawable/bg_cards"
                 android:orientation="vertical">
 
@@ -134,6 +134,33 @@
                     android:text="Canceled Plans"
                     android:textAlignment="center"
                     android:textColor="@color/colorDanger"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/logoutBtn"
+                android:layout_width="130dp"
+                android:layout_height="120dp"
+                android:gravity="center"
+                android:layout_margin="10dp"
+                android:background="@drawable/bg_cards"
+                android:orientation="vertical">
+
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    android:src="@drawable/ic_undraw_welcome_3gvl"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sspr"
+                    android:paddingTop="3dp"
+                    android:text="Logout"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorDefault"
                     android:textSize="15sp" />
 
             </LinearLayout>

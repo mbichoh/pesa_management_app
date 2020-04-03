@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.datepicker.CalendarConstraints;
@@ -20,6 +22,8 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.nathanmbichoh.pesa_management_app.model.SharedPrefManager;
+import com.nathanmbichoh.pesa_management_app.model.User;
 
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -32,7 +36,7 @@ public class Dashboard extends AppCompatActivity {
     private ImageView mImageViewUp, btnShowDatePicker;
 
     private TextView txtUsername, txtSelectedDate;
-    private LinearLayout mLinearActive, mLinearComplete, mLinearCanceled;
+    private LinearLayout mLinearActive, mLinearComplete, mLinearCanceled, mLinearLogout;
 
     private TextInputLayout mTextInputLayout;
     private AutoCompleteTextView mAutoCompleteTextView;
@@ -49,17 +53,30 @@ public class Dashboard extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
         mConstraintLayout = (ConstraintLayout) findViewById(R.id.custom_bottom_sheet_constraint);
 
+
+        //if the user is not logged in
+        //starting the login activity
+        if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
+            finish();
+            startActivity(new Intent(this, Login.class));
+        }
+
+        //getting the current user
+        User user = SharedPrefManager.getInstance(this).getUser();
+
         mBottomSheetBehavior = BottomSheetBehavior.from(mConstraintLayout);
         mCustomLinearLayout = (LinearLayout) findViewById(R.id.custom_linear_layout);
         mImageViewUp = (ImageView) findViewById(R.id.custom_header_arrow);
 
         //fetch user logged in name
         txtUsername = (TextView) findViewById(R.id.txtUserWelcome);
+        txtUsername.setText("Welcome "+user.getName());
 
         //linear buttons
         mLinearActive = (LinearLayout) findViewById(R.id.activePlansBtn);
         mLinearCanceled = (LinearLayout) findViewById(R.id.canceledPlansBtn);
         mLinearComplete = (LinearLayout) findViewById(R.id.completedPlansBtn);
+        mLinearLogout  = (LinearLayout) findViewById(R.id.logoutBtn);
 
         //textview
         txtSelectedDate = (TextView) findViewById(R.id.txtSelectedDate);
@@ -158,6 +175,16 @@ public class Dashboard extends AppCompatActivity {
                 });
                 snackbar.show();
 
+            }
+        });
+
+        //logout
+        mLinearLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Logging out...", Toast.LENGTH_LONG).show();
+                finish();
+                SharedPrefManager.getInstance(getApplicationContext()).logout();
             }
         });
 

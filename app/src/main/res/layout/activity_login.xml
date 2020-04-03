@@ -35,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Phone Number"
-        app:helperText="+254..."
+        app:helperText="2547..."
         android:textColorHint="@color/colorPrimaryDark"
         app:boxStrokeColor="@color/colorPrimaryDark"
         app:hintTextColor="?attr/colorPrimaryDark"
@@ -100,6 +100,14 @@
         android:fontFamily="@font/sspsb"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         />
+
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
 
 
 </LinearLayout>
