@@ -4,39 +4,49 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.datepicker.CalendarConstraints;
-import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.nathanmbichoh.pesa_management_app.model.RequestHandler;
 import com.nathanmbichoh.pesa_management_app.model.SharedPrefManager;
 import com.nathanmbichoh.pesa_management_app.model.User;
 
-import java.util.Calendar;
-import java.util.TimeZone;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public class Dashboard extends AppCompatActivity {
+import java.util.Calendar;
+import java.util.HashMap;
+
+public class Dashboard extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
+
+    String insertData = "https://ect.co.ke/pma/newplan.php";
 
     private LinearLayout mLinearLayout, mCustomLinearLayout;
     private ConstraintLayout mConstraintLayout;
     private BottomSheetBehavior mBottomSheetBehavior;
-    private ImageView mImageViewUp, btnShowDatePicker;
+    private ImageView mImageViewUp;
 
     private TextView txtUsername, txtSelectedDate;
-    private LinearLayout mLinearActive, mLinearComplete, mLinearCanceled, mLinearLogout;
+    private LinearLayout mLinearActive, mLinearComplete, mLinearCanceled, mLinearLogout, btnShowDatePicker;
 
     private TextInputLayout mTextInputLayout;
     private AutoCompleteTextView mAutoCompleteTextView;
@@ -45,6 +55,7 @@ public class Dashboard extends AppCompatActivity {
 
     private Button btnSavePlan;
 
+    String user_id, phone, dateReceive, save_type;
 
 
     @Override
@@ -72,6 +83,9 @@ public class Dashboard extends AppCompatActivity {
         txtUsername = (TextView) findViewById(R.id.txtUserWelcome);
         txtUsername.setText("Welcome "+user.getName());
 
+        user_id = ""+user.getId();
+        phone = user.getPhone();
+
         //linear buttons
         mLinearActive = (LinearLayout) findViewById(R.id.activePlansBtn);
         mLinearCanceled = (LinearLayout) findViewById(R.id.canceledPlansBtn);
@@ -88,48 +102,21 @@ public class Dashboard extends AppCompatActivity {
 
         //buttons
         btnSavePlan = (Button) findViewById(R.id.savePlanBtn);
+        btnSavePlan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    AddData();
+            }
+        });
 
         //datePicker
-                btnShowDatePicker = (ImageView) findViewById(R.id.btnShowDatePicker);
-
-                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Africa/Nairobi"));
-                calendar.clear();
-
-                long today = MaterialDatePicker.todayInUtcMilliseconds();
-
-                calendar.setTimeInMillis(today);
-
-                calendar.set(Calendar.MONTH, Calendar.JANUARY);
-                long january = calendar.getTimeInMillis();
-
-                calendar.set(Calendar.MONTH, Calendar.DECEMBER);
-                long december = calendar.getTimeInMillis();
-
-                //calender constraints
-                CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
-                constraintBuilder.setStart(january);
-                constraintBuilder.setEnd(december);
-
-                MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();  //for datePicker() single month and select show
-                builder.setTitleText("SELECT A DATE");
-                builder.setTheme(getTitleColor());
-                builder.setSelection(today); //get today
-                builder.setCalendarConstraints(constraintBuilder.build()); //get year calender
-                final MaterialDatePicker materialDatePicker = builder.build();
-
-                btnShowDatePicker.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        materialDatePicker.show(getSupportFragmentManager(), "DATE_PICKER");
-                    }
-                });
-
-                        materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
-                    @Override
-                    public void onPositiveButtonClick(Object selection) {
-                        txtSelectedDate.setText("Receiving Date : "+materialDatePicker.getHeaderText());
-                    }
-                });
+        btnShowDatePicker = (LinearLayout) findViewById(R.id.btnShowDatePicker);
+        btnShowDatePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog();
+            }
+        });
         //datePicker
         //linear active
         mLinearActive.setOnClickListener(new View.OnClickListener() {
@@ -183,8 +170,7 @@ public class Dashboard extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Logging out...", Toast.LENGTH_LONG).show();
-                finish();
-                SharedPrefManager.getInstance(getApplicationContext()).logout();
+                startActivity(new Intent(Dashboard.this, Login.class));
             }
         });
 
@@ -232,5 +218,136 @@ public class Dashboard extends AppCompatActivity {
         );
 
         mAutoCompleteTextView.setAdapter(adapter);
+        mAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                save_type = parent.getAdapter().getItem(position).toString();
+            }
+        });
+    }
+
+    private void showDatePickerDialog(){
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                this,
+                Calendar.getInstance().get(Calendar.YEAR),
+                Calendar.getInstance().get(Calendar.MONTH),
+                Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+        );
+
+        datePickerDialog.show();
+    }
+
+    public static final String[] MONTHS = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        int monthed = month + 1;
+        txtSelectedDate.setText("Receiving Date:  "+year+"-"+monthed+"-"+dayOfMonth);
+        dateReceive = year+"-"+month+"-"+dayOfMonth;
+    }
+
+    private void AddData() {
+        final String name = txtPlanName.getText().toString().trim();
+        final String deposit = txtAmountDep.getText().toString().trim();
+        final String receive = txtAmountRec.getText().toString().trim();
+
+        //validations
+        if(TextUtils.isEmpty(name)){
+            txtPlanName.setError("Fill in this field");
+            txtPlanName.requestFocus();
+            return;
+        }
+        if(TextUtils.isEmpty(deposit)){
+            txtAmountDep.setError("Fill in this field");
+            txtAmountDep.requestFocus();
+            return;
+        }
+        if(TextUtils.isEmpty(receive)){
+            txtAmountRec.setError("Fill in this field");
+            txtAmountRec.requestFocus();
+            return;
+        }
+
+       // Toast.makeText(getApplicationContext(), name +", "+deposit+", "+receive+", "+dateReceive+", "+phone+", "+save_type+", "+user_id ,Toast.LENGTH_LONG).show();
+
+        class CreatePlan extends AsyncTask<Void, Void, String> {
+
+            private ProgressBar progressBar;
+
+            @Override
+            protected String doInBackground(Void... voids) {
+                //creating request handler object
+                RequestHandler requestHandler = new RequestHandler();
+
+                //creating request parameters
+                HashMap<String, String> params = new HashMap<>();
+                params.put("plan_name", name);
+                params.put("save_type", save_type);
+                params.put("deposit", deposit);
+                params.put("receive", receive);
+                params.put("phone", phone);
+                params.put("date", dateReceive);
+                params.put("user_id", user_id);
+
+                //returing the response
+                return requestHandler.sendPostRequest(insertData, params);
+            }
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                //displaying the progress bar while user registers on the server
+                progressBar = (ProgressBar) findViewById(R.id.progressBar);
+                progressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                //hiding the progressbar after completion
+                progressBar.setVisibility(View.GONE);
+
+                try {
+                    //converting response to json object
+                    JSONObject obj = new JSONObject(s);
+
+                    //if no error in response
+                    if (!obj.getBoolean("error")) {
+                        View view = findViewById(R.id.savePlanBtn);
+                        Snackbar snackbar = Snackbar.make(view, obj.getString("message"), Snackbar.LENGTH_LONG);
+                        snackbar.setDuration(10000);
+                        snackbar.setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE);
+                        snackbar.setAction("OKAY", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //Do something
+                            }
+                        });
+                        snackbar.show();
+
+                    }else {
+                        View view = findViewById(R.id.savePlanBtn);
+                        Snackbar snackbar = Snackbar.make(view, "Some error occurred", Snackbar.LENGTH_LONG);
+                        snackbar.setDuration(10000);
+                        snackbar.setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE);
+                        snackbar.setAction("OKAY", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //Do something
+                            }
+                        });
+                        snackbar.show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        //executing the async task
+        CreatePlan ru = new CreatePlan();
+        ru.execute();
+
     }
 }

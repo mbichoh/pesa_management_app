@@ -131,6 +131,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
+            android:id="@+id/btnShowDatePicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -151,7 +152,6 @@
                 android:textSize="16sp" />
 
             <ImageView
-                android:id="@+id/btnShowDatePicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -195,7 +195,18 @@
             android:textSize="16dp"
             app:rippleColor="?attr/colorPrimaryDark" />
 
+        <ProgressBar
+            android:visibility="gone"
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
+
     </LinearLayout>
+
+
+
 
 
 
